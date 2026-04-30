@@ -1,35 +1,59 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect, useMemo } from "react";
+import UserCard from "./components/UserCard";
+import RegisterUser from "./components/RegisterUser";
 
 function App() {
-  const [count, setCount] = useState(0)
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    useEffect(() => {
+        fetch("https://jsonplaceholder.typicode.com/users")
+            .then((res) => {
+                if (!res.ok) throw new Error("Error fetching data");
+                return res.json();
+            })
+            .then((data) => {
+                const updatedUsers = data.map((user) => ({
+                    ...user,
+                    rating: 5,
+                    verified: false,
+                }));
+                setUsers(updatedUsers);
+                setLoading(false);
+            })
+            .catch((err) => {
+                setError(err.message);
+                setLoading(false);
+            });
+    }, []);
+
+    const addUser = (newUser) => {
+        setUsers([...users, { ...newUser, id: users.length + 1 }]);
+    };
+
+    const averageRating = useMemo(() => {
+        if (users.length === 0) return 0;
+        const total = users.reduce((sum, u) => sum + Number(u.rating), 0);
+        return (total / users.length).toFixed(2);
+    }, [users]);
+
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>{error}</p>;
+
+    return (
+        <div>
+            <h1>Users</h1>
+
+            <h3>Average Rating: {averageRating}</h3>
+
+            <RegisterUser addUser={addUser} />
+
+            {users.map((user) => (
+                <UserCard key={user.id} user={user} />
+            ))}
+        </div>
+    );
 }
 
-export default App
+export default App;
