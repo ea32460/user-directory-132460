@@ -1,7 +1,5 @@
 
-
-
-import { useState } from "react";
+import {useState} from "react";
 
 function RegisterUser({ addUser }) {
     const [name, setName] = useState("");

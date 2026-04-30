@@ -1,5 +1,13 @@
-import { useState, useEffect, } from "react";
+
+
+//Student:Emine Shabani | ID:132460
+
+
+
+import { useState} from "react";
+import{useEffect} from "react";
 import {useMemo} from "react";
+
 import UserCard from "./components/UserCard";
 import RegisterUser from "./components/RegisterUser";
 
@@ -30,9 +38,8 @@ function App() {
     }, []);
 
     const addUser = (newUser) => {
-        setUsers([...users, { ...newUser, id: users.length + 1 }]);
+        setUsers([...users, {...newUser, id: users.length + 1}]);
     };
-
     const averageRating = useMemo(() => {
         if (users.length === 0) return 0;
         const total = users.reduce((sum, u) => sum + Number(u.rating), 0);
@@ -48,13 +55,15 @@ function App() {
 
             <h3>Average Rating: {averageRating}</h3>
 
-            <RegisterUser addUser={addUser} />
+            <RegisterUser addUser={addUser}/>
 
             {users.map((user) => (
-                <UserCard key={user.id} user={user} />
+                <UserCard key={user.id} user={user}/>
             ))}
         </div>
     );
+
+
 }
 
 export default App;

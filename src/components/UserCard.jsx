@@ -1,6 +1,6 @@
 function UserCard({ user }) {
     return (
-        <div style={{ border: "1px solid black", margin: "10px", padding: "10px" }}>
+        <div style={{border: "1px solid black", margin: "10px", padding: "10px"}}>
             <p>id: {user.id}</p>
             <p>name: {user.name}</p>
             <p>email: {user.email}</p>
@@ -9,10 +9,9 @@ function UserCard({ user }) {
             <p>rating: {user.rating}</p>
             <p>verified: {user.verified.toString()}</p>
 
-            {user.verified && <p>✅ Verified user</p>}
-            {user.rating >= 4 && <p>⭐ Top rated</p>}
+            {user.verified && <p> Verified user</p>}
+            {user.rating >= 4 && <p> Top rated </p>}
         </div>
     );
 }
-
 export default UserCard;
